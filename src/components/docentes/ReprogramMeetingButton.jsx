@@ -1,24 +1,32 @@
-import React, { useState } from "react";
+
 import { ScheduleMeeting } from "./agendarReu/ScheduleMeeting";
 
 export function ReprogramMeetingButton({ telefono, email, fecha, link, idDocente }) {
   const [showScheduler, setShowScheduler] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null); // Agregado para manejar errores
 
   const handleCloseScheduler = () => {
     setShowScheduler(false); // Cierra el modal
   };
 
-  const handleReprogramarClick = () => {
-    setShowScheduler(true); // Abre el modal al hacer clic
+  const handleReprogramarClick = async () => {
+    setIsLoading(true); // Activa el estado de carga
+    try {
+      // Simula una operación asincrónica (por ejemplo, una llamada a la API)
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      setShowScheduler(true); // Abre el modal después de la "operación"
+    } catch (error) {
+      // Manejo de error si es necesario
+      console.error("Error al reprogramar reunión:", error);
+    } finally {
+      setIsLoading(false); // Desactiva el estado de carga
+    }
   };
 
   return (
     <div className="schedule-meeting">
-      {/* Verifica si hay error o está en carga */}
+      {/* Verifica si está en carga */}
       {isLoading && <p>Cargando...</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
 
       {/* Botón de "Reprogramar Reunión" */}
       <button

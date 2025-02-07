@@ -199,6 +199,7 @@ const IdiomasManager: React.FC = () => {
   return (
     <div className="idiomas-manager">
       <h1>Gestión de Idiomas</h1>
+        <button onClick={openAddModal} className="button add-button">Agregar Idioma</button>
 
       {/* Lista de idiomas */}
       <div className="idiomas-list">
@@ -215,7 +216,6 @@ const IdiomasManager: React.FC = () => {
 </div>
 
 
-      <button onClick={openAddModal} className="button add-button">Agregar Idioma</button>
 
       {/* Modal de Agregar Idioma */}
       {showAddModal && (

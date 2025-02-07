@@ -227,6 +227,8 @@ SELECT
             '"idPais":"', pp.idPais, '",',
             '"pais":"', pp.nombre, '",',
             '"fecha":"', pi.fecha, '",',
+         '"idTipoPublicacion":"', tp.idTipoPublicacion, '",',
+
             '"tipoPublicacion":"', tp.tipo, '"}'
         ) SEPARATOR ',' 
     ) AS publicacionesintelectuales,

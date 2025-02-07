@@ -57,7 +57,8 @@ header {
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  width: 50px;
+  width: 150px;
+  margin-left: 100px;
 }
 @keyframes degrade {
   0% {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+
 import { Modal } from '../util/modale';// Asegúrate de importar el modal reutilizable
 import "../../styles/postulantes.css";
 

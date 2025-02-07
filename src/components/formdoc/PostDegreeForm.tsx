@@ -31,8 +31,7 @@ const FormularioDocente: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [message, setMessage] = useState<string>("");
   const [showAll, setShowAll] = useState<boolean>(false); // Controla si se muestran todas las cards
-  const [selectedEstudio, setSelectedEstudio] =
-    useState<EstudioSuperior | null>(null);
+  const [selectedEstudio, setSelectedEstudio] = useState<EstudioSuperior | null>(null);
 
   // Cargar datos del docente
   useEffect(() => {
@@ -44,9 +43,7 @@ const FormularioDocente: React.FC = () => {
       }
 
       try {
-        const response = await fetch(
-          `http://localhost:4321/api/docentes/${docenteId}`
-        );
+        const response = await fetch(`http://localhost:4321/api/docentes/${docenteId}`);
         if (!response.ok) {
           throw new Error("Error al obtener datos del docente");
         }
@@ -67,17 +64,15 @@ const FormularioDocente: React.FC = () => {
     return <p>Cargando datos...</p>;
   }
 
+  // Si no se pudo obtener la data, mostramos un mensaje de error
   if (!docenteData) {
     return <p>Error: No se pudieron cargar los datos del docente.</p>;
   }
 
   const { idDocente, estudiossuperiores } = docenteData;
 
-  // Manejar cambios en los campos
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    field: string
-  ) => {
+  // Manejar cambios en los campos del formulario
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
     if (selectedEstudio) {
       setSelectedEstudio({
         ...selectedEstudio,
@@ -86,11 +81,13 @@ const FormularioDocente: React.FC = () => {
     }
   };
 
+  // Guardar el estudio (nuevo o actualizado)
   const handleSave = async () => {
     if (!selectedEstudio) return;
 
     try {
       if (selectedEstudio.idEstudio === null) {
+        // Crear nuevo estudio
         const response = await fetch(`/api/estudiossuppost`, {
           method: "POST",
           headers: {
@@ -126,15 +123,13 @@ const FormularioDocente: React.FC = () => {
             ? {
                 ...prevData,
                 estudiossuperiores: prevData.estudiossuperiores.map((e) =>
-                  e === selectedEstudio
-                    ? { ...selectedEstudio, idEstudio: result.idEstudio }
-                    : e
+                  e === selectedEstudio ? { ...selectedEstudio, idEstudio: result.idEstudio } : e
                 ),
               }
             : null
         );
       } else {
-        // Si el estudio ya existe (tiene un ID), hacemos un PUT
+        // Actualizar estudio existente
         const response = await fetch(`/api/estudiossup`, {
           method: "PUT",
           headers: {
@@ -171,7 +166,7 @@ const FormularioDocente: React.FC = () => {
     }
   };
 
-  // Crear un nuevo registro vacío y abrir la modal
+  // Crear un nuevo registro vacío y abrir la modal para creación
   const handleCreate = () => {
     const nuevoEstudio: EstudioSuperior = {
       idEstudio: null, // null indica que es un nuevo registro no guardado en la base de datos
@@ -180,19 +175,19 @@ const FormularioDocente: React.FC = () => {
       fecha: "",
       nombre: "",
       idPais: 0,
-      pais: "", // ID de país inicial
+      pais: "",
       idGrado: 0,
-      gradoTipo: "", // ID de grado inicial
+      gradoTipo: "",
       idModalidad: 0,
-      modalidad: "", // ID de modalidad inicial
+      modalidad: "",
       idTipoEstudios: 0,
-      tipoEstudios: "", // ID de tipo de estudios inicial
+      tipoEstudios: "",
     };
 
-    setSelectedEstudio(nuevoEstudio); // Abrir la modal con el nuevo estudio
+    setSelectedEstudio(nuevoEstudio);
   };
 
-  // Función para alternar la visibilidad de todas las cards
+  // Alternar visibilidad de todos los estudios (cards)
   const toggleShowAll = () => {
     setShowAll((prev) => !prev);
   };
@@ -200,58 +195,67 @@ const FormularioDocente: React.FC = () => {
   return (
     <div className="postdegreeform-container">
       <h3 className="form-title">Información del Docente</h3>
-      <button className="toggle-button1" onClick={toggleShowAll}>
-        {showAll ? "Mostrar menos" : "Mostrar más"}
-      </button>
+
+      {/* Renderizar el botón "Mostrar más" solo si hay más de 3 estudios */}
+      {estudiossuperiores.length > 3 && (
+        <button className="toggle-button1" onClick={toggleShowAll}>
+          {showAll ? "Mostrar menos" : "Mostrar más"}
+        </button>
+      )}
+
+      {/* Botón para crear un nuevo estudio, siempre visible */}
       <button className="create-button1" onClick={handleCreate}>
         Crear Nuevo Estudio
       </button>
       <p hidden>ID Docente: {idDocente}</p>
 
-      {estudiossuperiores
-        .slice(0, showAll ? estudiossuperiores.length : 2) // Muestra solo 2 o todas según el estado
-        .map((estudio, index) => (
-          <div key={index} className="study-card">
-            <h4 className={`study-title ${estudio.idEstudio ? "hidden" : ""}`}>
-              Estudio Superior #{estudio.idEstudio || "Nuevo"}
-            </h4>
-            <div className="study-fields">
-              <p>
-                <strong>Universidad:</strong> {estudio.universidad}
-              </p>
-              <p>
-                <strong>Carrera:</strong> {estudio.carrera}
-              </p>
-              <p>
-                <strong>Fecha:</strong> {estudio.fecha}
-              </p>
-              <p>
-                <strong>Nombre:</strong> {estudio.nombre}
-              </p>
-              <p>
-                <strong>País:</strong> {estudio.pais}
-              </p>
-              <p>
-                <strong>Grado:</strong> {estudio.gradoTipo}
-              </p>
-              <p>
-                <strong>Modalidad:</strong> {estudio.modalidad}
-              </p>
-              <p>
-                <strong>Tipo de Estudios:</strong> {estudio.tipoEstudios}
-              </p>
-            </div>
-            <button
-              className="edit-button2"
-              onClick={() => setSelectedEstudio(estudio)}
-            >
-              Editar
-            </button>
-          </div>
-        ))}
-
+      {/* Si no hay estudios, se muestra un mensaje informativo */}
+      {estudiossuperiores.filter(estudio => estudio !== null).length === 0 ? (
+  <p>No hay estudios para mostrar. Por favor, crea uno nuevo.</p>
+) : (
+  estudiossuperiores
+    .filter(estudio => estudio !== null)
+    .slice(0, showAll ? estudiossuperiores.length : 2)
+    .map((estudio, index) => (
+      <div key={index} className="study-card">
+        <h4 className={`study-title ${estudio.idEstudio ? "hidden" : ""}`}>
+          Estudio Superior #{estudio.idEstudio || "Nuevo"}
+        </h4>
+        <div className="study-fields">
+          <p>
+            <strong>Universidad:</strong> {estudio.universidad}
+          </p>
+          <p>
+            <strong>Carrera:</strong> {estudio.carrera}
+          </p>
+          <p>
+            <strong>Fecha:</strong> {estudio.fecha}
+          </p>
+          <p>
+            <strong>Nombre:</strong> {estudio.nombre}
+          </p>
+          <p>
+            <strong>País:</strong> {estudio.pais}
+          </p>
+          <p>
+            <strong>Grado:</strong> {estudio.gradoTipo}
+          </p>
+          <p>
+            <strong>Modalidad:</strong> {estudio.modalidad}
+          </p>
+          <p>
+            <strong>Tipo de Estudios:</strong> {estudio.tipoEstudios}
+          </p>
+        </div>
+        <button className="edit-button2" onClick={() => setSelectedEstudio(estudio)}>
+          Editar
+        </button>
+      </div>
+    ))
+)}
       {message && <p className="message-text">{message}</p>}
 
+      {/* Modal para editar o crear un estudio */}
       {selectedEstudio && (
         <div className="modal">
           <div className="modal-content">
@@ -281,7 +285,7 @@ const FormularioDocente: React.FC = () => {
               <input
                 className="custom-input"
                 type="date"
-                value={selectedEstudio.fecha} // Asegúrate de que esté en el formato 'YYYY-MM-DD'
+                value={selectedEstudio.fecha}
                 onChange={(e) => handleChange(e, "fecha")}
               />
             </div>
@@ -298,10 +302,10 @@ const FormularioDocente: React.FC = () => {
               <CountrySelect
                 valueAndId="idPais"
                 selectedId={selectedEstudio.idPais}
-                selected={selectedEstudio?.pais}
+                selected={selectedEstudio.pais}
                 selectedCountry={{
-                  id: selectedEstudio?.idPais || 0,
-                  name: selectedEstudio?.pais || "", // Asegúrate de que esté el valor correcto aquí
+                  id: selectedEstudio.idPais,
+                  name: selectedEstudio.pais,
                 }}
                 onCountryChange={(selectedCountry) => {
                   setSelectedEstudio((prev) =>
@@ -320,10 +324,10 @@ const FormularioDocente: React.FC = () => {
               <GradosSelect
                 valueAndId="idGrado"
                 selectedId={selectedEstudio.idGrado}
-                selected={selectedEstudio?.gradoTipo}
+                selected={selectedEstudio.gradoTipo}
                 selectedGrado={{
-                  id: selectedEstudio?.idGrado || 0,
-                  name: selectedEstudio?.gradoTipo || "", // Agregar nombre del grado
+                  id: selectedEstudio.idGrado,
+                  name: selectedEstudio.gradoTipo,
                 }}
                 onGradoChange={(selectedGrado) => {
                   setSelectedEstudio((prev) =>
@@ -342,10 +346,10 @@ const FormularioDocente: React.FC = () => {
               <ModalidadesSelect
                 valueAndId="idModalidad"
                 selectedId={selectedEstudio.idModalidad}
-                selected={selectedEstudio?.modalidad}
+                selected={selectedEstudio.modalidad}
                 selectedModalidad={{
-                  id: selectedEstudio?.idModalidad || 0,
-                  name: selectedEstudio?.modalidad || "", // Asegúrate de que tenga el nombre de modalidad
+                  id: selectedEstudio.idModalidad,
+                  name: selectedEstudio.modalidad,
                 }}
                 onModalidadChange={(selectedModalidad) => {
                   setSelectedEstudio((prev) =>
@@ -364,8 +368,8 @@ const FormularioDocente: React.FC = () => {
               <TypesSelect
                 valueAndId="idTipoEstudio"
                 selectedTypes={{
-                  id: selectedEstudio?.idTipoEstudios || 0,
-                  name: selectedEstudio?.tipoEstudios || "",
+                  id: selectedEstudio.idTipoEstudios,
+                  name: selectedEstudio.tipoEstudios,
                 }}
                 onTypesChange={(selectedType) => {
                   setSelectedEstudio((prev) =>
@@ -383,10 +387,7 @@ const FormularioDocente: React.FC = () => {
             <button className="save-button" onClick={handleSave}>
               Guardar
             </button>
-            <button
-              className="cancel-button"
-              onClick={() => setSelectedEstudio(null)}
-            >
+            <button className="cancel-button" onClick={() => setSelectedEstudio(null)}>
               Cancelar
             </button>
           </div>

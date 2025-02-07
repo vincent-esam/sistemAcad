@@ -1,5 +1,4 @@
 
-import React from "react";
 import { PDFDownloadLink, Document, Page, View, Text, Image, StyleSheet } from "@react-pdf/renderer";
 import "../../styles/postulantes.css";
 
