@@ -6,8 +6,8 @@ import { AreaForm } from "../ui/AreaForm";
 
 export const SingleForm = () => {
   const [formData, setFormData] = useState({
-    usuario: "",
-    password: "",
+    usuario: "", 
+    password: "", 
     nombres: "",
     apellidoPaterno: "",
     apellidoMaterno: "",
@@ -88,7 +88,7 @@ export const SingleForm = () => {
         setMessage("Postulación enviada correctamente.");
         setFormData({
           usuario: "", // Nuevo campo
-          password: "",
+          password: "", 
           nombres: "",
           apellidoPaterno: "",
           apellidoMaterno: "",
@@ -122,10 +122,28 @@ export const SingleForm = () => {
                 <h1 className="title-homepage title-homepage--lg">
                   Formulario Registro Docentes
                 </h1>
+                <div className="consultation__description">
+                  <p className="text-homepage text-homepage--lg">
+                    <b>
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Similique quibusdam a odit reprehenderit, quam deleniti,
+                      suscipit accusamus consequuntur, nulla minima aliquid non
+                      optio maxime facilis! Animi consequuntur ipsam voluptates
+                      suscipit.
+                    </b>
+                  </p>
+                  <p className="text-homepage text-homepage--sm">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Dolores nobis ratione enim deleniti molestiae inventore
+                    quasi rerum? Quidem, obcaecati a provident illo magnam quod
+                    consequuntur, at recusandae itaque nulla eveniet.
+                  </p>
+                  <br />
+                </div>
               </div>
               <div className="col-md-6 col-sm-12">
                 <form encType="multipart/form-data" onSubmit={handleSubmit}>
-                  <div
+                <div
                     style={{
                       marginTop: "15px",
                       textAlign: "center",
@@ -146,72 +164,74 @@ export const SingleForm = () => {
                       }}
                     />
                   </div>
-                  <div className="form-row" style={{ marginBottom: "10px" }}>
+                  <div className="form-row" style={{marginBottom:"10px"}}>
+                    
                     <input
                       type="file"
                       accept="image/*"
                       onChange={handleImageSelect} // Selección de imagen
                     />
+                    
                   </div>
-
+                
                   <div className="form-row">
-                    <div className="form-group input__group">
-                      <input
-                        type="text"
-                        name="usuario"
-                        id="usuario"
-                        className="form-control js-control-input"
-                        value={formData.usuario}
-                        onChange={handleChange}
-                      />
+                  <div className="form-group input__group">
+                  <input
+                      type="text"
+                      name="usuario"
+                      id="usuario"
+                      className="form-control js-control-input"
+                      value={formData.usuario}
+                      onChange={handleChange}
+                    />
                       <label htmlFor="usuario">Usuario</label>
                       <span className="error-text"></span>
                       <i className="error-icon"></i>
                     </div>
                     <div className="form-group input__group">
-                      <div className="password-group">
-                        <input
-                          type={showPassword ? "text" : "password"}
-                          name="password"
-                          id="password"
-                          className="form-control js-control-input"
-                          value={formData.password}
-                          onChange={handleChange}
-                        />
-                        <label htmlFor="password">Contraseña</label>
-                        <span className="error-text"></span>
-                        <i className="error-icon"></i>
-                        <span
-                          className="toggle-password"
-                          onClick={togglePasswordVisibility}
-                          title={
-                            showPassword
-                              ? "Ocultar contraseña"
-                              : "Mostrar contraseña"
-                          }
-                        >
-                          {showPassword ? (
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 24 24"
-                              width="24"
-                              height="24"
-                            >
-                              <path d="M12 4.5C7.5 4.5 3.8 7.3 2 12c1.8 4.7 5.5 7.5 10 7.5s8.2-2.8 10-7.5c-1.8-4.7-5.5-7.5-10-7.5zm0 13c-3.1 0-5.6-2.5-5.6-5.5S8.9 6.5 12 6.5s5.6 2.5 5.6 5.5-2.5 5.5-5.6 5.5zm0-2.1c1.8 0 3.3-1.4 3.3-3.4s-1.4-3.4-3.3-3.4-3.3 1.4-3.3 3.4 1.4 3.4 3.3 3.4z" />
-                            </svg>
-                          ) : (
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 24 24"
-                              width="24"
-                              height="24"
-                            >
-                              <path d="M2 12c1.8 4.7 5.5 7.5 10 7.5 2.5 0 4.9-.9 6.9-2.5l2.4 2.4 1.4-1.4-19-19-1.4 1.4 2.4 2.4C3.1 7.1 2 9.4 2 12zm10-7.5c-2.5 0-4.9.9-6.9 2.5l9.9 9.9c2-.5 3.9-1.7 5.2-3.4-1.8-4.7-5.5-7.5-10-7.5zm-6 3.6 3.3 3.3C9.1 10.1 10 10 12 10c1.4 0 2.7.1 4 .4l1.7 1.7c-.4-.1-.9-.1-1.7-.1-2.1 0-4 .5-5.7 1.3L4.5 8.1z" />
-                            </svg>
-                          )}
-                        </span>
+                    <div className="password-group">
+      <input
+        type={showPassword ? "text" : "password"}
+        name="password"
+        id="password"
+        className="form-control js-control-input"
+        value={formData.password}
+        onChange={handleChange}
+      />
+      <label htmlFor="password">Contraseña</label>
+      <span className="error-text"></span>
+      <i className="error-icon"></i>
+      <span
+        className="toggle-password"
+        onClick={togglePasswordVisibility}
+        title={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+      >
+         {showPassword ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+            >
+              <path
+                d="M12 4.5C7.5 4.5 3.8 7.3 2 12c1.8 4.7 5.5 7.5 10 7.5s8.2-2.8 10-7.5c-1.8-4.7-5.5-7.5-10-7.5zm0 13c-3.1 0-5.6-2.5-5.6-5.5S8.9 6.5 12 6.5s5.6 2.5 5.6 5.5-2.5 5.5-5.6 5.5zm0-2.1c1.8 0 3.3-1.4 3.3-3.4s-1.4-3.4-3.3-3.4-3.3 1.4-3.3 3.4 1.4 3.4 3.3 3.4z"
+              />
+            </svg>
+          ) : (
+            <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            width="24"
+            height="24"
+          >
+            <path
+              d="M2 12c1.8 4.7 5.5 7.5 10 7.5 2.5 0 4.9-.9 6.9-2.5l2.4 2.4 1.4-1.4-19-19-1.4 1.4 2.4 2.4C3.1 7.1 2 9.4 2 12zm10-7.5c-2.5 0-4.9.9-6.9 2.5l9.9 9.9c2-.5 3.9-1.7 5.2-3.4-1.8-4.7-5.5-7.5-10-7.5zm-6 3.6 3.3 3.3C9.1 10.1 10 10 12 10c1.4 0 2.7.1 4 .4l1.7 1.7c-.4-.1-.9-.1-1.7-.1-2.1 0-4 .5-5.7 1.3L4.5 8.1z"
+            />
+          </svg>
+          )}
+      </span>
 
-                        <style>{`
+      <style >{`
         .password-group {
           position: relative;
         }
@@ -229,7 +249,7 @@ export const SingleForm = () => {
           font-size: 18px;
         }
       `}</style>
-                      </div>
+    </div>
                     </div>
                     <div className="form-group input__group">
                       <input

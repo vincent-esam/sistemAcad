@@ -7,8 +7,9 @@ interface HabilidadBlanda {
 }
 
 const HabilidadesBlandasManager: React.FC = () => {
+  // Nota: Si la API pudiera devolver elementos nulos, definimos el estado como array de (HabilidadBlanda | null)
   const [idDocente, setIdDocente] = useState<number | null>(null);
-  const [habilidadesBlandas, setHabilidadesBlandas] = useState<HabilidadBlanda[]>([]);
+  const [habilidadesBlandas, setHabilidadesBlandas] = useState<(HabilidadBlanda | null)[]>([]);
   const [editingHabilidad, setEditingHabilidad] = useState<HabilidadBlanda | null>(null);
   const [newHabilidades, setNewHabilidades] = useState<string[]>([]); // Varias habilidades nuevas
   const [modalType, setModalType] = useState<"edit" | "add" | null>(null); // Tipo de modal
@@ -30,6 +31,7 @@ const HabilidadesBlandasManager: React.FC = () => {
         if (!response.ok) throw new Error("Error al obtener datos del docente");
 
         const data = await response.json();
+        // Se asume que la API devuelve la propiedad "habilidades_blandas"
         setHabilidadesBlandas(data.habilidades_blandas || []);
       } catch (error) {
         console.error("Error al obtener las habilidades blandas:", error);
@@ -64,9 +66,10 @@ const HabilidadesBlandasManager: React.FC = () => {
 
       if (!response.ok) throw new Error("Error al actualizar la habilidad");
 
+      // Actualizamos el estado local reemplazando la habilidad editada
       setHabilidadesBlandas((prev) =>
         prev.map((h) =>
-          h.idHabilidadBlanda === editingHabilidad.idHabilidadBlanda
+          h && h.idHabilidadBlanda === editingHabilidad.idHabilidadBlanda
             ? { ...h, habilidad: editingHabilidad.habilidad }
             : h
         )
@@ -100,7 +103,8 @@ const HabilidadesBlandasManager: React.FC = () => {
 
       if (!response.ok) throw new Error("Error al agregar la nueva habilidad");
 
-      const newHabilidadesIds = await response.json(); // IDs de las nuevas habilidades
+      // Se esperan los nuevos IDs de las habilidades agregadas
+      const newHabilidadesIds = await response.json();
 
       const newSkills = newHabilidades.map((habilidad, index) => ({
         idHabilidadBlanda: newHabilidadesIds[index],
@@ -124,10 +128,11 @@ const HabilidadesBlandasManager: React.FC = () => {
         <p>Cargando...</p>
       ) : (
         <div className="habilidades-container">
-          {habilidadesBlandas.map((habilidad) => (
-            <div className="habilidad-card" key={habilidad.idHabilidadBlanda}>
-              <p>{habilidad.habilidad}</p>
-              <button className="edit-btn" onClick={() => handleEdit(habilidad)}>
+          {/* Se filtran los elementos nulos antes de mapear */}
+          {habilidadesBlandas.filter((h) => h !== null).map((habilidad) => (
+            <div className="habilidad-card" key={habilidad!.idHabilidadBlanda}>
+              <p>{habilidad!.habilidad}</p>
+              <button className="edit-btn" onClick={() => handleEdit(habilidad!)}>
                 Editar
               </button>
             </div>
